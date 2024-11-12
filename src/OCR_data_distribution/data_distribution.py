@@ -2,6 +2,7 @@ from huggingface_hub import snapshot_download
 import os
 import json
 
+token = os.getenv("HUGGINGFACE_TOKEN")
 
 def download_huggingface_repo(repo_id):
     """
@@ -17,7 +18,7 @@ def download_huggingface_repo(repo_id):
     """
     local_dir = "./data/" + repo_id.split('/')[-1]
     os.makedirs(local_dir, exist_ok=True)
-    downloaded_path = snapshot_download(repo_id=repo_id, local_dir=local_dir)
+    downloaded_path = snapshot_download(repo_id=repo_id, local_dir=local_dir, token=token)
     
     print(f"Repository '{repo_id}' successfully downloaded to: {downloaded_path}")
     return downloaded_path
@@ -62,6 +63,16 @@ def main(repo_names):
         write_json(data_distribution, repo_name)
 
 
+def get_data_distribution():
+    filenames = ['dergetenjur_data.distribution', 'lhasakanjur_data.distribution', 'lithangkanjur_data.distribution']
+    for filename in filenames:
+        file_path = f"./data/{filename}"
+        with open(file_path, "r") as f:
+            data_distribution = f.read()
+            data_dict = convert_string_to_dict(data_distribution)
+            write_json(data_dict, filename.split(".")[0])
+
+
+
 if __name__ == "__main__":
-    repo_names = ["BDRC/CombinedBetsug_Wylie_E_v1","BDRC/Norbuketaka_C_V1", "BDRC/GoogleBooks_E_v1"]
-    distribution = main(repo_names)
+    get_data_distribution()
