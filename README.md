@@ -10,15 +10,14 @@
 <h3 align="center">Use this repo template for all new Python projects.</h3>
 
 ## Description
-
-Project description goes here.
+This is the repo for handling the data distribution used for OCR data and then creating hugging face repo with the data distribution and images in the zip file.
 
 ## Project owner(s)
 
 <!-- Link to the repo owners' github profiles -->
 
-- [@10zinten](https://github.com/10zinten)
-- [@evanyerburgh](https://github.com/evanyerburgh)
+- [@10zinten](https://github.com/ta4tsering)
+- [@evanyerburgh](https://github.com/10kalden)
 
 ## Integrations
 
