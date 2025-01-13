@@ -4,7 +4,7 @@ from datasets import Dataset, DatasetDict
 from huggingface_hub import HfApi
 
 
-local_dir = "../data/ocr_bm_data_jsonl"
+local_dir = "data/ocr_bm_data_jsonl"
 repo_name = "openpecha/OCR-Tibetan_line_to_text_benchmark"
 
 
@@ -37,5 +37,7 @@ def upload_to_huggingface(dataset_dict, repo_name):
     dataset_dict.push_to_hub(repo_name, token=True)
 
 
-dataset_dict = convert_jsonl_to_parquet(local_dir)
-upload_to_huggingface(dataset_dict, repo_name)
+
+if __name__ == "__main__":
+    dataset_dict = convert_jsonl_to_parquet(local_dir)
+    upload_to_huggingface(dataset_dict, repo_name)
