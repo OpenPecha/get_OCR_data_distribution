@@ -1,8 +1,13 @@
 import os
 import json
+import logging
 import requests
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
+
+# Set up logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 def download_image(url, save_path):
@@ -12,17 +17,18 @@ def download_image(url, save_path):
             with open(save_path, 'wb') as file:
                 for chunk in response.iter_content(1024):
                     file.write(chunk)
-            print(f"Image saved to {save_path}")
+            logger.info(f"Successfully downloaded {url} to {save_path}")
         else:
-            print(f"Failed to download {url}: HTTP {response.status_code}")
+            logger.warning(f"Failed to download {url}: HTTP {response.status_code}")
     except Exception as e:
-        print(f"Error downloading {url}: {e}")
+        logger.error(f"Error downloading {url}: {e}")
 
 
 def process_jsonl_file(jsonl_file, output_dir):
     jsonl_name = Path(jsonl_file).stem
     folder_path = os.path.join(output_dir, jsonl_name)
     os.makedirs(folder_path, exist_ok=True)
+    logger.info(f"Processing JSONL file: {jsonl_file}")
 
     tasks = []
 
@@ -36,20 +42,22 @@ def process_jsonl_file(jsonl_file, output_dir):
                     save_path = os.path.join(folder_path, image_name)
                     tasks.append((image_url, save_path))
             except json.JSONDecodeError as e:
-                print(f"Error decoding JSON in {jsonl_file}: {e}")
+                logger.error(f"Error decoding JSON in {jsonl_file}: {e}")
             except Exception as e:
-                print(f"Error processing line in {jsonl_file}: {e}")
+                logger.error(f"Error processing line in {jsonl_file}: {e}")
 
+    logger.info(f"Downloading {len(tasks)} images.")
     with ThreadPoolExecutor() as executor:
         for url, save_path in tasks:
             executor.submit(download_image, url, save_path)
 
 
 def main():
-    jsonl_file = "data/test_data_json/OCR-Dergetenjur.jsonl"  
-    output_dir = "data/ocr_benchmark_images"    
-    print(f"Processing file: {jsonl_file}")
+    jsonl_file = "data/test_data_json/OCR-Dergetenjur.jsonl"
+    output_dir = "data/ocr_benchmark_images"
+    logger.info(f"Starting processing for file: {jsonl_file}")
     process_jsonl_file(jsonl_file, output_dir)
+    logger.info("Processing completed.")
 
 
 if __name__ == "__main__":

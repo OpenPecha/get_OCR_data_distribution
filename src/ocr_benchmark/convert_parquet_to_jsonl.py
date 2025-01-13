@@ -16,5 +16,3 @@ output_file = 'data/test_data_json/OCR-Dergetenjur.jsonl'
 os.makedirs(os.path.dirname(output_file), exist_ok=True)
 df = pd.read_parquet(input_file)
 convert_to_jsonl(df, output_file)
-
-print(f"Converted {input_file} to {output_file}")
