@@ -4,7 +4,7 @@ from datasets import Dataset, DatasetDict
 from huggingface_hub import HfApi
 
 
-local_dir = "data/ocr_bm_data_jsonl"
+local_dir = "../data/ocr_bm_data_jsonl"
 repo_name = "openpecha/OCR-Tibetan_line_to_text_benchmark"
 
 
