@@ -26,7 +26,6 @@ def convert_parquet_to_jsonl(input_dir, output_dir):
 
                 df = pd.read_parquet(input_file_path)
                 convert_to_jsonl(df, output_file_path)
-                print(f"Converted: {input_file_path} -> {output_file_path}")
 
 
 def main():
